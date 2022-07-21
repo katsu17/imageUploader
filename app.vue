@@ -15,14 +15,19 @@ const uploadFile = (event) => {
 const files = ref([])
 const imageUrls = ref([])
 
+const deleteImage = (index) => {
+  imageUrls.value.splice(index, 1)
+}
+
 </script>
 
 <template>
   <div>
     <div>商品写真</div>
     <input type="file" multiple @change="uploadFile">
-    <div v-for="imageUrl in imageUrls " id="preview" :key="imageUrl">
+    <div v-for="(imageUrl, index) in imageUrls " id="preview" :key="imageUrl">
       <img :src="imageUrl" alt="">
+      <button @click="deleteImage(index)">×</button>
     </div>
   </div>
 </template>
