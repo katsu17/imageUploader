@@ -8,8 +8,8 @@ const uploadFile = (event) => {
   for (const file of files.value) {
     const reader = new FileReader();
 
-    reader.onload = function (e) {
-      const imageUrl = e.target.result;
+    reader.onload = function (event) {
+      const imageUrl = event.target.result;
       imageUrls.value.push(imageUrl)
     }
     reader.readAsDataURL(file);
@@ -60,24 +60,25 @@ const save = async () => {
 </script>
 
 <template>
-  <header>画像のアップロード</header>
-  <label for="imgUpload">
-    アップロード
-    <input id="imgUpload" type="file" multiple @change="uploadFile">
-  </label>
-
-  <div class="images">
-    <div v-for="(imageUrl, index) in imageUrls " :key="imageUrl">
-      <img :src="imageUrl" alt="">
-      <div class="buttons">
-        <button @click="moveLeft(index)">←</button>
+  <div class="flex flex-col justify-center max-w-3xl font-sans">
+    <div class=" py-5 text-center bg-gray my-5">画像のアップロード</div>
+    <div class="flex flex-wrap justify-between w-full">
+      <label for="imgUpload" class="bg-gray w-32 h-32 m-2 flex items-center justify-center my-2">
+        <img src="~/assets/upload.png" class="cursor-pointer w-8" alt="">
+        <input id="imgUpload" type="file" multiple @change="uploadFile">
+      </label>
+      <div v-for="(imageUrl, index) in imageUrls " :key="imageUrl" class="m-2">
         <button @click="deleteImage(index)">×</button>
-        <button @click="moveRight(index)">→</button>
+        <div class="relative w-32 h-32"><img :src="imageUrl" alt="" class="object-contain absolute w-full h-full"></div>
+        <div class="flex justify-between w-full">
+          <button @click="moveLeft(index)">←</button>
+          <button @click="moveRight(index)">→</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <button :disabled="isLoading" @click="save">{{ isLoading ? 'Loading' : '保存' }}</button>
+    <button :disabled="isLoading" @click="save" class="my-5 py-5">{{ isLoading ? 'Loading' : '保存' }}</button>
+  </div>
 </template>
 
 <style>
@@ -85,43 +86,101 @@ const save = async () => {
   display: none;
 }
 
-.incButton {
-  width: 100px;
-  height: 100px;
-  border: 1px solid #000;
+.my-5 {
+  margin: 1.25rem 0;
 }
 
-img {
-  width: 140px;
-  margin: 10px;
-  border: solid 1px silver;
+.mx-2 {
+  margin: 0 0.5rem;
 }
 
-.buttons {
+.absolute {
+  position: absolute;
+}
+
+.object-contain {
+  object-fit: contain;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.font-sans {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.flex {
   display: flex;
-  justify-content: space-between;
-  width: 140px;
-  margin: 10px;
 }
 
-.images {
-  display: flex;
+.items-center {
+  align-items: center;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-wrap {
   flex-wrap: wrap;
-  justify-content: space-between;
 }
 
-header {
-  padding: 20px 0;
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: between;
+}
+
+.mx-auto {
+  margin: 0 auto;
+}
+
+.max-w-3xl {
+  max-width: 48rem;
+}
+
+.m-2 {
+  margin: 0.5rem;
+}
+
+.py-5 {
+  padding: 1.25rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+
+.w-8 {
+  width: 2rem;
+}
+
+.w-32 {
+  width: 8rem;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
+.h-32 {
+  height: 8rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.bg-gray {
   background-color: rgba(128, 128, 128, 0.3);
-  text-align: center;
-}
-
-input {
-  margin: 20px 0;
-}
-
-.textCenter {
-  text-align: center;
 }
 
 .relative {
